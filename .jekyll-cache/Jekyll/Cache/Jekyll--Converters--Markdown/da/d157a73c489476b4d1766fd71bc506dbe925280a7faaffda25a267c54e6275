@@ -1,0 +1,24 @@
+I"�<p>Here are some words. And this is some math:</p>
+
+<p>$
+e=mc^2
+$</p>
+
+<p>$\documentclass[a4paper,12pt,twoside]{book}$
+$\usepackage[english]{babel}$
+$\usepackage[utf8]{inputenc}$</p>
+
+<p>$\pagestyle{headings}$</p>
+
+<p>$\begin{document}$
+$\chapter{Sample Chapter}$
+$\section{New section}$</p>
+
+<p>Hello, here is some text without a meaning.  This text should 
+show what a printed text will look like at this place.  If you 
+read this text, you will get no information.  Really?  Is there 
+no information?  Is there a difference between this text and some 
+nonsense like ``Huardest gefburn?  Kjift “ not at all!…</p>
+
+<p>$\end{document}$</p>
+:ET

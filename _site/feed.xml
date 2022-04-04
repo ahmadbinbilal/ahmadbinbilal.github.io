@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-04T15:12:41+05:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">Hello World</title><link href="http://localhost:4000/blog/2022/04/03/example/" rel="alternate" type="text/html" title="Hello World" /><published>2022-04-03T00:00:00+05:00</published><updated>2022-04-03T00:00:00+05:00</updated><id>http://localhost:4000/blog/2022/04/03/example</id><content type="html" xml:base="http://localhost:4000/blog/2022/04/03/example/"><![CDATA[<h2 id="this-is-a-header">This is a header</h2>
+
+<p>Here are some words. And this is some math:</p>
+
+<p>$<br />
+e=mc^2
+$</p>
+
+<p>Here is a link to <a href="http://github.com/">Github Now</a></p>
+
+<p>Here is my beatiful code<br />
+\newline</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var x = 10
+var y = 20
+print(x+y)
+</code></pre></div></div>
+
+<p><em>Here is some text in italics</em></p>
+
+<p>Inline markup styles:</p>
+
+<ul>
+  <li><em>italics</em></li>
+  <li><strong>bold</strong></li>
+  <li><code class="highlighter-rouge">code()</code></li>
+</ul>
+
+<blockquote>
+  <p>Blockquote</p>
+  <blockquote>
+    <p>Nested Blockquote</p>
+  </blockquote>
+</blockquote>
+
+<p>Syntax highlighting can be used by wrapping your code in a liquid tag like so:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/* Some pointless Javascript */</span>
+<span class="kd">var</span> <span class="nx">rawr</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">r</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">a</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">w</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">r</span><span class="dl">"</span><span class="p">];</span></code></pre></figure>
+
+<p>Use two trailing spaces<br />
+on the right<br />
+to create linebreak tags</p>
+
+<p>Finally, horizontal lines</p>
+
+<hr />
+<hr />]]></content><author><name></name></author><summary type="html"><![CDATA[This is a header]]></summary></entry></feed>

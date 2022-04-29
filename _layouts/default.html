@@ -10,32 +10,35 @@
 
     <link rel='shortcut icon' href='/assets/logo.png' />
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 
     <link href='/css/blog.css' rel='stylesheet'/>
+    <link href='/css/me.css' rel='stylesheet'/>
     <link href='/css/trac.css' rel='stylesheet'/>
     <link href='/css/markdown.css' rel='stylesheet'/>
+    <link href="/css/syntaxHighlight.css" rel="stylesheet" >
+
 
 
     {% include mathjax.html %}
 </head>
-<body>
+<body class = 'BG'>
 <div class='content'>
     {% include nav.html %}
     <div class='front-matter'>
         <div class='wrap'>
-            <h1 class="text-3xl text-slate-700 font-semibold">{{ page.title }}</h1>
-            <h4 class="text-sm text-slate-500 font-light my-1">{{ page.subtitle }}</h4>
+            <h1 class="large titleCol semibold">{{ page.title }}</h1>
+            <h4 class="text-sm subCol thin mt-1 mb-3">{{ page.subtitle }}</h4>
             <div class='bylines'>
-                <div class='byline mt-5'>
-                    <h3>Published</h3>
-                    <p>{{ page.date |  date: '%d %B %Y' }}</p>
+                <div class='byline'>
+                    <h3 class="byCol mt-5">Published</h3>
+                    <p class="byCol">{{ page.date |  date: '%d %B %Y' }}</p>
                 </div>
             </div>
             <div class='clear'></div>
         </div>
     </div>
-    <div class='wrap article leading-8 mt-0'>
+    <div class='wrap article mt-0 titleCol'>
         {{ content }}
     </div>
 

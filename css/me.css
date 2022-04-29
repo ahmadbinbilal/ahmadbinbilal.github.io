@@ -1,0 +1,129 @@
+.BG{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity)); 
+}
+
+
+
+/* Colors */
+.titleCol {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity));
+}
+.subCol{
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}
+.byCol{
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity));
+}
+
+/* Text Sizes */
+.large{
+  font-size: 1.875rem/* 30px */;
+  line-height: 2.25rem/* 36px */;
+}
+.medium{
+  font-size: 1.5rem/* 24px */;
+  line-height: 2rem/* 32px */;
+}
+.small {
+  font-size: 0.875rem/* 14px */;
+  line-height: 1.25rem/* 20px */;
+}
+
+/* Text Weights */
+.semibold {
+  font-weight: 600;
+}
+.normal {
+  font-weight: 500;
+}
+.thin {
+  font-weight: 300;
+}
+
+
+/* Margin stuff */
+.mt-2 {
+  margin-top: 0.5rem/* 8px */;
+}
+.mt-5 {
+  margin-top: 1.25rem/* 20px */;
+}
+.mt-16 {
+  margin-top: 4rem/* 64px */;
+}
+.mt-60 {
+  margin-top: 15rem/* 240px */;
+}
+.mb-3 {
+  margin-bottom: 0.75rem/* 12px */;
+}
+.mt-1 {
+  margin-top: 0.25rem/* 4px */;
+}
+.my-1 {
+  margin-top: 0.25rem/* 4px */;
+  margin-bottom: 0.25rem/* 4px */;
+}
+.mt-0 {
+  margin-top: 0px;
+}
+.center{
+  display: block;
+  text-align: center;
+}
+
+/* Fonts */
+.font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+
+/* Other cool stuff */
+.raise:hover {
+  font-weight: bold;
+}
+.raise{
+  transition: 200ms;
+}
+.noBullets{
+  padding: 0;
+  list-style-type: none;
+}
+.noDecor{
+  text-decoration: none;
+}
+.code {
+  /* border-top: 1px solid;
+  border-bottom: 1px solid; */
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 1px ;
+  margin: 30px 0;
+}
+
+/* @media (prefers-color-scheme: dark) { */
+  .BG {
+    --tw-bg-opacity: 1;
+    background-color: rgb(23 23 23 / var(--tw-bg-opacity));
+  }
+  .titleCol {
+    --tw-text-opacity: 1;
+    color: rgb(212 212 212 / var(--tw-text-opacity));
+  }
+  .subCol{
+    --tw-text-opacity: 1;
+    color: rgb(163 163 163 / var(--tw-text-opacity));
+  }
+  .byCol{
+    --tw-text-opacity: 1;
+    color: rgb(115 115 115 / var(--tw-text-opacity));
+  }
+  .dateCol {
+    --tw-text-opacity: 1;
+    color: rgb(115 115 115 / var(--tw-text-opacity));
+  }
+/* } */

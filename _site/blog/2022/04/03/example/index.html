@@ -10,11 +10,14 @@
 
     <link rel='shortcut icon' href='/assets/logo.png' />
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 
     <link href='/css/blog.css' rel='stylesheet'/>
+    <link href='/css/me.css' rel='stylesheet'/>
     <link href='/css/trac.css' rel='stylesheet'/>
     <link href='/css/markdown.css' rel='stylesheet'/>
+    <link href="/css/syntaxHighlight.css" rel="stylesheet" >
+
 
 
     <script type='text/x-mathjax-config'>
@@ -35,75 +38,31 @@ MathJax.Hub.Config({
 <script src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML' type='text/javascript'></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
 </head>
-<body>
+<body class = 'BG'>
 <div class='content'>
-    <div class='nav text-center'>
-    <ul class='wrap'>
-        <li><a href='/'>Home</a></li>
-        <li><a href='/blog'>Blog</a></li>
-    </ul>
-</div>
+    <link href='/css/me.css' rel='stylesheet'/>
+    <div class='nav center'>
+        <ul class='wrap '>
+            <li><a href='/' class="titleCol">Home</a></li>
+            <li><a href='/posts' class="titleCol">Posts</a></li>
+            <li><a href='/feed.xml' class="titleCol">RSS</a></li>
+        </ul>
+    </div>
     <div class='front-matter'>
         <div class='wrap'>
-            <h1 class="text-3xl text-slate-700 font-semibold">Hello World</h1>
-            <h4 class="text-sm text-slate-500 font-light my-1">Welcome to my Blog</h4>
+            <h1 class="large titleCol semibold">Hello World</h1>
+            <h4 class="text-sm subCol thin mt-1 mb-3">First post</h4>
             <div class='bylines'>
-                <div class='byline mt-5'>
-                    <h3>Published</h3>
-                    <p>03 April 2022</p>
+                <div class='byline'>
+                    <h3 class="byCol mt-5">Published</h3>
+                    <p class="byCol">03 April 2022</p>
                 </div>
             </div>
             <div class='clear'></div>
         </div>
     </div>
-    <div class='wrap article leading-8 mt-0'>
-        <h2 id="this-is-a-header">This is a header</h2>
-
-<p>Here are some words. And this is some math:</p>
-
-<p>$<br />
-e=mc^2
-$</p>
-
-<p>Here is a link to <a href="http://github.com/">Github Now</a></p>
-
-<p>Here is my beatiful code<br />
-\newline</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var x = 10
-var y = 20
-print(x+y)
-</code></pre></div></div>
-
-<p><em>Here is some text in italics</em></p>
-
-<p>Inline markup styles:</p>
-
-<ul>
-  <li><em>italics</em></li>
-  <li><strong>bold</strong></li>
-  <li><code class="highlighter-rouge">code()</code></li>
-</ul>
-
-<blockquote>
-  <p>Blockquote</p>
-  <blockquote>
-    <p>Nested Blockquote</p>
-  </blockquote>
-</blockquote>
-
-<p>Syntax highlighting can be used by wrapping your code in a liquid tag like so:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/* Some pointless Javascript */</span>
-<span class="kd">var</span> <span class="nx">rawr</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">r</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">a</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">w</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">r</span><span class="dl">"</span><span class="p">];</span></code></pre></figure>
-
-<p>Use two trailing spaces<br />
-on the right<br />
-to create linebreak tags</p>
-
-<p>Finally, horizontal lines</p>
-
-<hr />
-<hr />
+    <div class='wrap article mt-0 titleCol'>
+        <p>Hello! Welcome to my blog.</p>
 
     </div>
 

@@ -1,0 +1,152 @@
+<html>
+<head>
+    <title>A Gentle Introduction to Dynamic Programming</title>
+    <meta charset='UTF-8'>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+
+    <meta name='description' content=''>
+    <meta name='keywords' content='dynamic programming, competitive programming, algorithms, DSA'>
+    <meta name='author' content='Ahmad Bilal'>
+
+    <link rel='shortcut icon' href='/assets/logo.png' />
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Varela+Round&display=swap" rel="stylesheet">
+
+    <link href='/css/blog.css' rel='stylesheet'/>
+    <link href='/css/trac.css' rel='stylesheet'/>
+    <link href='/css/markdown.css' rel='stylesheet'/>
+    <link href="/css/syntaxHighlight.css" rel="stylesheet" >
+    <link href='/css/me.css' rel='stylesheet'/>
+    
+
+
+    <!-- for mathjax support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+<script type="text/javascript" async src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</head>
+<body class = 'BG'>
+<div class='content'>
+    <link href='/css/me.css' rel='stylesheet'/>
+    <div class='nav center'>
+        <ul class='wrap '>
+            <li><a href='/' class="titleCol">Home</a></li>
+            <li><a href='/posts' class="titleCol">Posts</a></li>
+            <li><a href='/feed.xml' class="titleCol">RSS</a></li>
+        </ul>
+    </div>
+    <div class='front-matter'>
+        <div class='wrap'>
+            <h1 class="large titleCol semibold">A Gentle Introduction to Dynamic Programming</h1>
+            <h4 class="text-sm subCol thin mt-1 mb-3">An introduction to elementary DP concepts for absolute beginners.</h4>
+            <div class='bylines'>
+                <div class='byline'>
+                    <h3 class="byCol mt-5">Published</h3>
+                    <p class="byCol">18 July 2022</p>
+                </div>
+            </div>
+            <div class='clear'></div>
+        </div>
+    </div>
+    <div class='wrap article mt-0 titleCol goodFont'>
+        <h2 id="setting-the-stage">Setting the Stage</h2>
+
+<p>Most brute force algorithms that we have written until now are quite boring. They do the same thing over and over again, recursively running some calculations until they find the answer. Such algorithms are usually the simplest solution to problems, and as it is with many simple solutions to problems, they are quite often inefficient. Our objective with dynamic programming is to introduce a style of programming in which we utilize our previous calculations to speed up our algorithm. It may sound simple because it really is very simple.</p>
+
+<p>Essentially what we do is we split up our problem into smaller subproblems that can easily be solved. Then, whenever we solve one of these subproblems, we remember the answer so that we can use it later on to solve more subproblems. Let’s take a look at the most common example when it comes to dynamic programming: finding the nth Fibonacci number.</p>
+
+<h2 id="finding-the-nth-fibonacci-number">Finding the Nth Fibonacci number</h2>
+
+<p>For the uninitiated, the Fibonacci numbers are a series of numbers, starting from 0 and 1, in which each number is the sum of the two numbers before it. Mathematically, the sequence can be defined as</p>
+
+\[F_{0} = 0\]
+
+\[F_{1} = 1\]
+
+\[F_{n} = F_{n-1} + F_{n-2}\]
+
+<p>Walking through an example, the third Fibonacci number would be the sum of 0 and 1 which is 1. Similarly, the fourth Fibonacci number would be the sum of 1 and 1, which is 2. Continuing the pattern we get an infinite sequence of numbers that look like so:</p>
+
+\[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...\]
+
+<p>The problem at hand is to find the nth Fibonacci number. Before we dive into how we could solve this with dynamic programming, let’s try to solve this with a brute force algorithm.</p>
+
+<p>A naïve solution to this problem is to create a recursive function that returns the <code class="highlighter-rouge">n</code>th Fibonacci number by taking the sum of the previous two Fibonacci numbers. Our base case for the function will be the first and second Fibonacci numbers which we know are 0 and 1 respectively. Let’s implement this in python.</p>
+
+<div class="language-python code highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">function</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span> <span class="c1">#returns 0 and 1 for fib(1) and fib(2) respectively
+</span>  <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This solution works. If we input 5, the <code class="highlighter-rouge">fib</code> function will call <code class="highlighter-rouge">fib(4)</code> and <code class="highlighter-rouge">fib(3)</code> summing their results. <code class="highlighter-rouge">fib(4)</code> and <code class="highlighter-rouge">fib(3)</code> will also do the same, calling and summing their predecessors until we reach our base case.</p>
+
+<h2 id="memoization">Memoization</h2>
+
+<p>The algorithm that we have just implemented is, although straighforward, not very efficient. To get a feel for this we can draw a diagram of all the recursive calls to <code class="highlighter-rouge">fib()</code></p>
+
+<div class="figure">
+    <img src="/assets/images/intro-to-dp/1.png" style="height: 200px; display: block; margin: 0 auto;" />
+    <div class="caption">
+        <span class="caption-label">Figure 1.</span> A graphical representation of the brute force algorithm in which each node represents a call to the fib function with that input.
+    </div>
+</div>
+
+<p>This tree does seem a bit scary in terms of time complexity, but I do see a way we can make this algorithm much more efficient. Notice how some nodes are being repeated which means that sometimes <code class="highlighter-rouge">fib()</code> is being called on the same input over and over again.  This is really bad because not only is <code class="highlighter-rouge">fib()</code> getting called again but all of its children recursive calls as well. In fact, as n gets larger and larger, this happens more and more frequently. Why don’t we store all the return values from <code class="highlighter-rouge">fib()</code> in one big n-sized array so that we can look up our answer if we have computed it before? For example whenever we compute <code class="highlighter-rouge">fib(x)</code> we can store the result in <code class="highlighter-rouge">array[x]</code>. Now we can look up our answer in <code class="highlighter-rouge">O(1)</code> time before each recursive call. This process of storing results of subproblems in an array to prevent needlessly computing the results of those subproblems again is known as memoization (deriving its name from the idea of noting down our answer on a ‘memo notepad’). We just have to add a few lines of code to implement this.</p>
+
+<div class="language-python code highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span> <span class="c1">#returns 0 and 1 for fib(1) and fib(2) respectively
+</span>  <span class="k">if</span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>If you think about it, this algorithm takes <code class="highlighter-rouge">O(n)</code> time since we call <code class="highlighter-rouge">fib()</code> on every number less than the initial n and we never repeat calls on the same input. This is much better, but there is still room for some slight improvements in space complexity.</p>
+
+<h2 id="tabulation">Tabulation</h2>
+
+<p>As suggested by the previous sentence, the space complexity of our algorithm is still not optimal. You may notice that with this solution we are effectively working our way down the Fibonacci numbers until we get to the base case. However, there isn’t anything stopping us from going the other way, working our way up from the base case until we reach the value of <code class="highlighter-rouge">fib(n)</code>. We can do that since we know:</p>
+
+\[F_{n} = F_{n-1} + F_{n-2}\]
+
+\[\therefore\]
+
+\[F_{n+1} = F_{n} + F_{n-1}\]
+
+<p>We can initialize an array that we fill first with the initial values of 0 and 1. Then we can iteratively append the sum of the last 2 elements in the array as per the second equation above. Now, we have a solution with <code class="highlighter-rouge">O(n)</code> time complexity and <code class="highlighter-rouge">O(n)</code> space complexity. Awesome.  This method is known as tabulation since we are ‘filling up a table’, in a bottom-up style until we get our answer.</p>
+
+<div class="language-python code highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">arr</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+  <span class="k">return</span> <span class="n">table</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="wrapping-up">Wrapping up</h2>
+
+<p>Hopefully, these two concepts will help you understand where to start with dynamic programming problems, however dynamic programming is a concept that can only truly be learnt through practice. Only through solving various problems can you really understand when and how to use these tools correctly.</p>
+
+<p>As a general rule of thumb, I find it easiest to find memorization solutions to problems by first dividing my problem into subproblems which can be solved by brute force (often a byproduct of coming up with a brute force solution). Then I can go ahead and memorize the solution, finding where calculations are being repeated and storing them in some list. Tabulation is similar. I like to first divide the problem into subproblems and then figure out if one’s answer is simply a small update away from the previous answer. Again, easier said then done.</p>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script src=”https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id=”MathJax-script” async src=”https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/assets/js/scroll.js"></script>

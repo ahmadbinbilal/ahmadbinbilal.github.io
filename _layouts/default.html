@@ -11,13 +11,16 @@
     <link rel='shortcut icon' href='/assets/logo.png' />
 
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Varela+Round&display=swap" rel="stylesheet">
 
     <link href='/css/blog.css' rel='stylesheet'/>
-    <link href='/css/me.css' rel='stylesheet'/>
     <link href='/css/trac.css' rel='stylesheet'/>
     <link href='/css/markdown.css' rel='stylesheet'/>
     <link href="/css/syntaxHighlight.css" rel="stylesheet" >
-
+    <link href='/css/me.css' rel='stylesheet'/>
+    
 
 
     {% include mathjax.html %}
@@ -38,10 +41,18 @@
             <div class='clear'></div>
         </div>
     </div>
-    <div class='wrap article mt-0 titleCol'>
+    <div class='wrap article mt-0 titleCol goodFont'>
         {{ content }}
     </div>
 
 </div>
+
+
 </body>
 </html>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script src=”https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id=”MathJax-script” async src=”https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/assets/js/scroll.js"></script>

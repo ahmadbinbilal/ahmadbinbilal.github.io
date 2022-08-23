@@ -11,6 +11,9 @@ html {
   font-family: 'Inter';
 }
 
+.MathJax_Display{
+  margin: 3rem;
+}
 
 
 /* Colors */

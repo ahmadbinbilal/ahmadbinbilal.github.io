@@ -1,4 +1,157 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-22T14:24:57+05:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">A Gentle Introduction to Dynamic Programming</title><link href="http://localhost:4000/blog/intro-to-DP/" rel="alternate" type="text/html" title="A Gentle Introduction to Dynamic Programming" /><published>2022-07-18T00:00:00+05:00</published><updated>2022-07-18T00:00:00+05:00</updated><id>http://localhost:4000/blog/intro-to-DP</id><content type="html" xml:base="http://localhost:4000/blog/intro-to-DP/"><![CDATA[<h2 id="setting-the-stage">Setting the Stage</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-08-23T10:54:28+05:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">Markov Chains - Part 1</title><link href="http://localhost:4000/blog/MC-p1-copy/" rel="alternate" type="text/html" title="Markov Chains - Part 1" /><published>2022-08-09T00:00:00+05:00</published><updated>2022-08-09T00:00:00+05:00</updated><id>http://localhost:4000/blog/MC-p1%20copy</id><content type="html" xml:base="http://localhost:4000/blog/MC-p1-copy/"><![CDATA[<h2 id="setting-the-stage">Setting the Stage</h2>
+
+<!-- Let's suppose I have started recording all the days that it has rained this month where I live. At the end of the month, the recordings show that it has rained 15 out of the 30 days of the month. What can I say about the probability that it rained on any given day of that month?  -->
+
+<p>There has recently been an outbreak of a dangerous new virus called OompaVirus! The world’s top scientists and reasearchers have been hard at work and have come up with the following statistics:</p>
+
+<ul>
+  <li>On any given day, there is a 30% chance that you contract OompaVirus</li>
+  <li>If you have contracted OompaVirus, there is a 5% chance that you recover from it on any given day of you being sick</li>
+</ul>
+
+<p>As you scroll through the various headlines, you see that 20% of the population has already contracted OompaVirus. Your birthday is in 20 days and you want to know the probability that you will be healthy to celebrate it.</p>
+
+<p>If you start solving this problem on paper, it may prove to be a bit harder than it initially seemed to be. At the start of every day, there are two possible outcomes: you either have the virus, or you don’t. The tricky part about this problem is that each of those two outcomes depend only on your state the previous day. If you try to draw a tree of these possible outcomes after each day, you will start to find yourself lost in a binary tree that has a depth of 20. Trying to sum up the probability of each route and its outcome to get your answer is a tedious process. Our goal with Markov chains is to create a model of such a system and answer questions like this with simple equations.</p>
+
+<h2 id="the-markov-chain">The Markov Chain</h2>
+
+<!-- A Markov Chain is simply a model of a system in which something can change states over some unit time. In our example that 'something' would be the weather changing its state from rainy to sunny and our unit time would be one day The crux of this model lies in how we model changes in states. Instead of modeling them as fixed percentages, we model them as transitions of states. Instead of saying there is a 50% chance that it rained on any given day, we might say that every next day in that month, there was a 20% chance of transitioning from a rainy day to a sunny day, and an 80% chance of transitioning from a rainy day to a rainy day. 
+
+We usually represent these Markov chains in two different ways: A transition diagram or a transition probability matrix. Let's first take a look at the former. Transition diagrams are really just directional graphs with the weights of edges representing the probability of transition from the first node to the second after 1 unit time. Therefore, the sum of all outbound edge weights should always be 1 (or 100%). -->
+
+<p>All a Markov chain really does is model a system where the state of something changes after every unit time depending on its current state. In our case, the unit time is one day and our states are either healthy or infected. Generally, there are two ways we can represent a Markov chain: through a transition diagram, and through a transition probability matrix. Let’s first take a look at the former.</p>
+
+<p>A transition diagram is essentially a weighted directed graph with nodes representing states and edges representing transitions. The weights of these edges, therefore, represent the probability that the transition will occur after 1 unit time. The transition diagram for our example would look something like this:</p>
+
+<p>IMAGE</p>
+
+<p>This representation is very useful for understanding a Markov chain but it is not quite practical for mathematical operations. That’s why mathematicians usually prefer matrix notation. We can condense this diagram into a matrix where the entry at \(i,j\) is the probability that we will transition from state \(i\) to state \(j\) after 1 unit time. We can create this matrix with the label \(v\) representing the infected state, and the label \(h\) representing the healthy state, like so:</p>
+
+\[\begin{array}{c c c} &amp; &amp;
+
+\begin{array}{c c} v &amp; h \\
+\end{array} 
+\\
+
+P  = &amp;
+\begin{array}{c c }
+v \\
+h
+\end{array}
+&amp;
+\left[
+\begin{array}{c c c}
+0.95 &amp; 0.05  \\
+0.3 &amp; 0.7 
+\end{array}
+\right]
+
+\end{array}\]
+
+<h2 id="state-distibution-matricies">State distibution Matricies</h2>
+
+<!-- Now that we have a matrix representation of our markov chains, we can start doing all sorts of operations on it. Before we go any further though, I want to introduce the idea of a state distribution matrix. Remember that we were also given one more piece of information - the percent of global population infected at the start of 2056. Specifically, we were told that 20% of the global population had already been infected. We can create a matrix, $$S_0$$,  that represents this initial state distribution like so: -->
+
+<p>Another matrix we will we will be using to solve this problem is known as the state distribution matrix. The \(n\)<sup>th</sup> state distribution matrix represents the probability that any given person is in one state or another, on day \(n\). In our case, that just means the portion of the population that infected on the \(n\)<sup>th</sup> day. Our zeroth state distribution matrix (AKA initial state distribution matrix) would therefore be …</p>
+
+\[\begin{array}{c} 
+
+\begin{array}{c c}&amp;&amp;v &amp; h \\
+\end{array} 
+\\
+S_0 = 
+\left[
+\begin{array}{c c }
+0.2 &amp; 0.8 \\
+\end{array}
+\right]
+
+\end{array}\]
+
+<p>Now, if I want to find the portion of the population that is infected by tommorow, all I have to do is take the sum of the following:</p>
+<ul>
+  <li>the portion of healthy people multiplied by the probability that a healthy person contracts the virus at the end of one day</li>
+  <li>the portion of infected people multiplied by the probability that an infected person remains infected at the end of one day</li>
+</ul>
+
+<p>Matrix multiplication allows us to do just that. If we multiply the \(n\)<sup>th</sup> state distribution matrix by the transition probability matrix, we will get the \(n+1\)<sup>th</sup> state distribution matrix.</p>
+
+\[S_0 * P = S_1 \\
+
+
+
+\left[
+\begin{array}{c c }
+0.2 &amp; 0.8 \\
+\end{array}
+\right]
+
+
+
+\left[
+\begin{array}{c c c}
+0.95 &amp; 0.05  \\
+0.3 &amp; 0.7 
+\end{array}
+\right]
+
+= 
+
+\left[
+\begin{array}{c c }
+0.43 &amp; 0.57 \\
+\end{array}
+\right]\]
+
+<p>Going back to the question, let’s see if there is a way to find the \(n\)<sup>th</sup> state distribution matrix using only the initial state distribution matrix. Since we know how to update our state distribution by one day, surely we can repeat the process to find the state distribution matrix of the \(n\)<sup>th</sup> day. Let’s see how we would do this with \(n=4\).</p>
+
+\[S_0 * P = S_1 \\
+S_1 * P = S_2 \\
+
+\therefore \\
+
+(S_0 * P) * P = S_2 \\
+((S_0 * P) * P) * P = S_3 \\
+(((S_0 * P) * P) * P) * P= S_4\]
+
+<p>This is no doubt a messy equation, but recall that matrix multiplication is associative (i.e. you can move the parenthesis around without changing the answer)</p>
+
+\[(((S_0 * P) * P) * P ) * P = S_4\\
+S_0 * (P*P*P*P) = S_4\\
+S_0 * P^4 = S_4\]
+
+<p>More generally,</p>
+
+\[S_n = S_0 * P^n\]
+
+<p>To answer our initial question,</p>
+
+\[S_0 * P^{20} = S_20 \\
+
+\left[
+\begin{array}{c c }
+0.2 &amp; 0.8 \\
+\end{array}
+\right]
+
+
+
+\left[
+\begin{array}{c c c}
+0.857 &amp; 0.143  \\
+0.857 &amp; 0.143 
+\end{array}
+\right]
+
+= 
+
+\left[
+\begin{array}{c c }
+0.857 &amp; 0.143 \\
+\end{array}
+\right]\]
+
+<p>There is an 85.7% chance that we will be infected on the day of our birthday.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Setting the Stage]]></summary></entry><entry><title type="html">A Gentle Introduction to Dynamic Programming</title><link href="http://localhost:4000/blog/intro-to-DP/" rel="alternate" type="text/html" title="A Gentle Introduction to Dynamic Programming" /><published>2022-07-18T00:00:00+05:00</published><updated>2022-07-18T00:00:00+05:00</updated><id>http://localhost:4000/blog/intro-to-DP</id><content type="html" xml:base="http://localhost:4000/blog/intro-to-DP/"><![CDATA[<h2 id="setting-the-stage">Setting the Stage</h2>
 
 <p>Most brute force algorithms that we have written until now are quite boring. They do the same thing over and over again, recursively running some calculations until they find the answer. Such algorithms are usually the simplest solution to problems, and as it is with many simple solutions to problems, they are quite often inefficient. Our objective with dynamic programming is to introduce a style of programming in which we utilize our previous calculations to speed up our algorithm. It may sound simple because it really is very simple.</p>
 
@@ -76,167 +229,4 @@
 
 <p>Hopefully, these two concepts will help you understand where to start with dynamic programming problems, however dynamic programming is a concept that can only truly be learnt through practice. Only through solving various problems can you really understand when and how to use these tools correctly.</p>
 
-<p>As a general rule of thumb, I find it easiest to find memorization solutions to problems by first dividing my problem into subproblems which can be solved by brute force (often a byproduct of coming up with a brute force solution). Then I can go ahead and memorize the solution, finding where calculations are being repeated and storing them in some list. Tabulation is similar. I like to first divide the problem into subproblems and then figure out if one’s answer is simply a small update away from the previous answer. Again, easier said then done.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Setting the Stage]]></summary></entry><entry><title type="html">Building A Computer with Cellular Automata</title><link href="http://localhost:4000/blog/gol/" rel="alternate" type="text/html" title="Building A Computer with Cellular Automata" /><published>2022-04-05T00:00:00+05:00</published><updated>2022-04-05T00:00:00+05:00</updated><id>http://localhost:4000/blog/gol</id><content type="html" xml:base="http://localhost:4000/blog/gol/"><![CDATA[<h2 id="introduction-to-cellular-automata-and-the-game-of-life">Introduction to Cellular Automata and The Game of Life</h2>
-
-<p>     In 1970, a British Mathematician by the name of John Conway devised a 0 player game known as ‘The Game of Life’. Unbeknownst to him, the simple game would soon take researchers and math enthusiasts alike by storm. The game was an example of what is known as a cellular automaton, or a grid containing cells that evolve over time according to a set of rules driven by the state of the cell and its neighbors. The initial configuration, or initial states of the cells before evolving, is determined by assigning each cell a state manually. After that, the game commences and the cells start to evolve. For GOL (the Game of Life), there are 2 possible states for each cell, namely ‘dead’ or ‘alive’. As for what is considered a neighboring cell, GOL follows what is known as Moore’s neighborhood, where any cells neighbors are the 8 surrounding cells to it.</p>
-
-<div class="figure">
-    <img src="/assets/images/GOL/Fig-1.png" style="height: 200px; display: block; margin: 0 auto;" />
-    <div class="caption">
-        <span class="caption-label">Figure 1.</span> A representation of Moore's neighborhood. The red cells are neighbors of the white cell in the center.
-    </div>
-</div>
-
-<p>The rules for evolution in GOL are also quite simple:</p>
-<ul>
-  <li>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</li>
-  <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
-  <li>Any live cell with more than three live neighbors dies, as if by overpopulation.</li>
-  <li>Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.</li>
-</ul>
-
-<div class="figure">
-    <div class="center"><iframe src="https://imgflip.com/embed/6bq06n"></iframe></div>
-    <div class="caption">
-        <span class="caption-label">Figure 2.</span> This shows the evolution of a simple initial configuration. Here, black represents a dead cell, and white represents a living one. The structure first seems to grow almost randomly until almost abruptly, many cells die according to rule 3.
-    </div>
-</div>
-
-<h2 id="programming-gol">Programming GOL</h2>
-
-<p>Understanding GOL can be significantly easier with an interactive version of the game. Luckily, such a simple system is quite easy to program. In fact, the GIF above was generated with some code I wrote. In p5.js, the most straightforward way to do this is to generate a 2d array that represents the grid. Each element is either a <code class="highlighter-rouge">0</code> or a <code class="highlighter-rouge">1</code>. We can then draw the grid every frame like so:</p>
-
-<div class="language-javascript code highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">drawCells</span><span class="p">(){</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">rows</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">cols</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">*</span> <span class="nx">resolution</span><span class="p">;</span>
-      <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">*</span> <span class="nx">resolution</span><span class="p">;</span>
-      <span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">fill</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="nx">stroke</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-      <span class="nx">rect</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">resolution</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">resolution</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>Then to update this grid, we can create an empty new 2d array. For each element in the new array we store the state of its corresponding cell in the next generation. Then, we can simply set our grid array to the new array. Notice, how we cannot directly start updating the state of every element in the grid array as that would lead to a cell’s neighbor being changed before itself. This could cause some unexpected behavior. For this reason, we call GOL a <em>synchronous</em> cellular automaton. We can write a function for updating the grid like so:</p>
-
-<div class="language-javascript code highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">update</span><span class="p">(){</span>
-  <span class="kd">let</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">make2DArray</span><span class="p">(</span><span class="nx">cols</span><span class="p">,</span> <span class="nx">rows</span><span class="p">);</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">rows</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">cols</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      
-      <span class="kd">let</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">];</span>
-      <span class="kd">let</span> <span class="nx">neighbors</span> <span class="o">=</span> <span class="nx">countNeighbors</span><span class="p">(</span><span class="nx">grid</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">);</span>
-
-      <span class="k">if</span> <span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">neighbors</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">neighbors</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">||</span> <span class="nx">neighbors</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">))</span> <span class="p">{</span>
-        <span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">next</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">state</span><span class="p">;</span>
-      <span class="p">}</span>
-      
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">grid</span> <span class="o">=</span> <span class="nx">next</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">countNeighbors</span><span class="p">(</span><span class="nx">grid</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">let</span> <span class="nx">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">let</span> <span class="nx">col</span> <span class="o">=</span> <span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">cols</span><span class="p">)</span> <span class="o">%</span> <span class="nx">cols</span><span class="p">;</span>
-      <span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">)</span> <span class="o">%</span> <span class="nx">rows</span><span class="p">;</span>
-      <span class="nx">sum</span> <span class="o">+=</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">col</span><span class="p">][</span><span class="nx">row</span><span class="p">];</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">sum</span> <span class="o">-=</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">];</span>
-  <span class="k">return</span> <span class="nx">sum</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>Now we can simply call <code class="highlighter-rouge">draw()</code> every frame and call <code class="highlighter-rouge">update()</code> every time the user presses a key. To make the program interactive, we can simply make a cell live, if it has been clicked by the user with the following code:</p>
-
-<div class="language-javascript code highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">mousePressed</span><span class="p">(){</span>
-  <span class="nx">grid</span><span class="p">[</span><span class="nx">floor</span><span class="p">(</span><span class="nx">mouseX</span><span class="o">/</span><span class="nx">resolution</span><span class="p">)][</span><span class="nx">floor</span><span class="p">(</span><span class="nx">mouseY</span><span class="o">/</span><span class="nx">resolution</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> 
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Alas, we have a working simulation. I encourage you to run the code yourself with <a href="https://editor.p5js.org/ahmadsafibilal2007@gmail.com/sketches/QHX0dUtdx">this URL</a> and experiment with GOL before we dive into building a fully Turing complete computer with it.</p>
-
-<h2 id="signals">Signals</h2>
-<p>     Before we attempt to build a computer with GOL, we need to understand exactly how computers actually work. The main part of the computer responsible for computations is the processor. It takes in electrical signals which represent binary digits (i.e. digits of <code class="highlighter-rouge">0</code>’s and <code class="highlighter-rouge">1</code>’s) and can manipulate them with special circuits known as <em>logic gates</em>. These logic gates provide the building blocks of all programs in a computer.</p>
-
-<p>     Of course, in GOL, there are no electrical signals. We have to instead find another way to represent binary digits. We would need some structure of cells that can be easily created and destroyed as well as traverse the grid in a similar fashion to electrical signals. Then to represent binary digits, we could create a stream of these structures, generating a new one every $n$ generations and putting it into the stream. If we find the structure every $n$ generations at some receiving end of the stream, the generator is working and we may consider that <code class="highlighter-rouge">1</code> has been represented; If not, then the stream has been interrupted, signifying <code class="highlighter-rouge">0</code>.</p>
-
-<p>     Fortunately, such a structure has already been discovered by MIT professor Bill Gosper, in the late 1970’s. It is known as a ‘Glider’ and is generated by a ‘Glider Gun’. These gliders evolve seemingly randomly, however after 4 generations they resemble their original appearance only shifted one cell diagonally. Due to this geometric translation, over time they can traverse the grid, allowing them to ‘carry signals’.</p>
-
-<div class="figure">
-    <img src="/assets/images/GOL/Fig-3.png" style="width: 100%; display: block; margin: 0 auto;" />
-    <div class="caption">
-        <span class="caption-label">Figure 3.</span> This shows how a glider evolves. Every 5th generation, the glider comes back to the same shape but only shifted one cell to the right, and one cell down. In the figure, $t$ represents time (i.e. the generation number) and a white cell represents a live cell. By $t=12$, the glider has traversed well across the grid, reaching the bottom of it.
-    </div>
-</div>
-
-<div class="figure">
-    <div class="center"><iframe src="/assets/images/GOL/fig-4.gif" style="height:250px ; width:250px"></iframe></div>
-    <div class="caption">
-        <span class="caption-label">Figure 4.</span> This shows a glider in action, as it traverses the grid diagonally downwards. Flipping it would allow it to traverse the other way around.  
-    </div>
-</div>
-
-<p>     Gospel Glider Guns (glider guns of the original model invented by Bill Gosper) have a much more complex looking shape. They work by repeatedly colliding with each other in a very specific way, that allow for a new glider to be generated every 30 generations.</p>
-<div class="figure">
-    <div class="center"><iframe src="/assets/images/GOL/fig-5.gif" style="height: 180px; width: 250px"></iframe></div>
-    <div class="caption">
-        <span class="caption-label">Figure 5.</span> This shows the workings of a glider gun as it produces a glider every 30 generations, sending it into a diagonal stream. The structures that are traversing the grid and leaving the frame at the bottom right are the gliders.
-    </div>
-</div>
-
-<p>Gospel Glider Guns, in their purest form, cannot ‘pause’ for 30 generations to create a large gap that could represent the binary digit <code class="highlighter-rouge">0</code> in the stream. However, gliders do have some special properties which we can utilize to intercept a stream and create logic gates.</p>
-
-<h2 id="logic-gates">Logic Gates</h2>
-
-<p>     <em>This post would be too long if I started to explain logic gates from scratch, so instead I made another post for it. I highly encourage you to go through it before reading this section.</em></p>
-
-<p>     As of now, the stream of gliders we have created with glider guns can only represent the binary digit <code class="highlighter-rouge">1</code>. To represent <code class="highlighter-rouge">0</code>, we need a way to intercept the original input stream and destroy the gliders within it. Luckily, gliders have a unique property that can help us do just that. If a glider collides with another glider, they will annihilate each other under the following conditions:</p>
-<ul>
-  <li>One glider is one cell lower than the other</li>
-  <li>The distance between the gliders is an odd number</li>
-</ul>
-
-<div class="figure">
-    <img src="/assets/images/GOL/Fig-6.png" style="width: 40%; display: block; margin: 0 auto;" />
-    <div class="caption">
-        <span class="caption-label">Figure 6.</span> This depicts the conditions under which two gliders will destroy each other.
-    </div>
-</div>
-
-<div class="figure">
-    <div class="center"><iframe src="/assets/images/GOL/fig-7.gif" style="height: 180px; width: 250px"></iframe></div>
-    <div class="caption">
-        <span class="caption-label">Figure 7.</span> This shows two gliders colliding under the given conditions.
-    </div>
-</div>
-
-<p>     We can use this to pretty easily create a NOT gate. All we have to do is have an input stream of gliders which would contain gliders if the input is <code class="highlighter-rouge">1</code>. We can then set up a glider gun to create a constant stream of gliders perpendicular to the input stream. We can treat the part of the new stream which comes after the intersection of the two streams, as the output stream. Then, if the input stream is <code class="highlighter-rouge">1</code>, the gliders from the new stream will be destroyed at the intersection. If not, they will pass through, inverting the signal. Since it is understood how gliders and glider guns work, figures after this which do not introduce a new idea, will use a diagrammatic representation of the systems.</p>
-
-<div class="figure">
-    <div class="center"><img src="/assets/images/GOL/fig-8.gif" style="height:auto; width:250" /></div>
-    <div class="caption">
-        <span class="caption-label">Figure 8.</span> This shows a diagrammatic representation of a NOT gate. The red boxes depict glider guns and the blue circles depict gliders. The left gun's stream may be considered the input. The portion of the stream of the right gun that extends after the intersection may be considered the output. With the input gun on, the input stream fills representing `1`. It blocks the output stream from filling and hence turns the output stream to `0`. Then, when we remove the input gun, turning the input to `0`, the output stream is un-blocked and fills. Hence, the input signal has been inverted and we have created the NOT gate.
-    </div>
-</div>
-
-<p>     AND gates can also be created similarly. However, for the AND gate we’ll use one additional component known as the ‘glider eater’. A glider eater, as the name suggests, can destroy a glider without changing shape or moving. This way, we can create new streams that help us in creating the logic gate, without having the streams go on indefinitely. This is useful because as we increase the complexity of our circuits by chaining logic gates, we don’t want streams going all over the place. The only stream  which we will not stop with a glider eater, is the main input and output stream.</p>
-
-<div class="figure">
-    <div class="center"><img src="/assets/images/GOL/fig-9.gif" style="height:auto; width:250" /></div>
-    <div class="caption">
-        <span class="caption-label">Figure 9.</span> A glider eater in action.
-    </div>
-</div>
-
-<p>     AND gates can be constructed using a stream which we’ll call X that runs perpendicular to two parallel input streams, A and B. B will also act as the output stream, once it crosses X. A and X can be stopped using a glider eater</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Introduction to Cellular Automata and The Game of Life]]></summary></entry><entry><title type="html">Hello World</title><link href="http://localhost:4000/blog/hello-world/" rel="alternate" type="text/html" title="Hello World" /><published>2022-04-03T00:00:00+05:00</published><updated>2022-04-03T00:00:00+05:00</updated><id>http://localhost:4000/blog/hello-world</id><content type="html" xml:base="http://localhost:4000/blog/hello-world/"><![CDATA[<p>Hello! Welcome to my blog.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Hello! Welcome to my blog.]]></summary></entry></feed>
+<p>As a general rule of thumb, I find it easiest to find memorization solutions to problems by first dividing my problem into subproblems which can be solved by brute force (often a byproduct of coming up with a brute force solution). Then I can go ahead and memorize the solution, finding where calculations are being repeated and storing them in some list. Tabulation is similar. I like to first divide the problem into subproblems and then figure out if one’s answer is simply a small update away from the previous answer. Again, easier said then done.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Setting the Stage]]></summary></entry><entry><title type="html">Hello World</title><link href="http://localhost:4000/blog/hello-world/" rel="alternate" type="text/html" title="Hello World" /><published>2022-04-03T00:00:00+05:00</published><updated>2022-04-03T00:00:00+05:00</updated><id>http://localhost:4000/blog/hello-world</id><content type="html" xml:base="http://localhost:4000/blog/hello-world/"><![CDATA[<p>Hello! Welcome to my blog.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Hello! Welcome to my blog.]]></summary></entry></feed>
